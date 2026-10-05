@@ -1,6 +1,7 @@
 import { useState, type ReactNode } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import { hasRole, signOut, useSessionUser } from '../core/auth/session';
+import { NavIcon } from './NavIcons';
 import { navigation } from '../remotes/registry';
 
 type Theme = 'light' | 'dark';
@@ -47,6 +48,7 @@ export function Shell(): ReactNode {
             .filter((item) => hasRole(user, ...item.roles))
             .map((item) => (
               <NavLink key={item.to} to={item.to} end={item.to === '/'} className={({ isActive }) => (isActive ? 'active' : '')}>
+                <NavIcon to={item.to} />
                 {item.label}
               </NavLink>
             ))}
