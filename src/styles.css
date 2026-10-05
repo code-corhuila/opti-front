@@ -1,44 +1,60 @@
 /* OptiView design system: tokens, then the components the portals share.
    Portals use these class names; they carry no stylesheet of their own. */
 
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
 :root {
-  --bg: #f4f6f8;
+  --navy: #0c1f3f;
+  --navy-soft: #142b52;
+  --blue: #1d6fe8;
+  --blue-strong: #1558b8;
+  --bg: #f4f6fa;
   --surface: #ffffff;
-  --surface-2: #eef2f5;
-  --text: #16232f;
-  --text-soft: #4b5b69;
-  --border: #d5dde4;
-  --primary: #0b6e8a;
-  --primary-strong: #085669;
+  --surface-2: #eef1f7;
+  --text: #0f1b2e;
+  --text-soft: #5b6578;
+  --border: #dde2ea;
+  --primary: var(--blue);
+  --primary-strong: var(--blue-strong);
   --on-primary: #ffffff;
-  --focus: #0b6e8a;
-  --danger: #b3261e;
-  --danger-bg: #fdecea;
-  --success: #1b6e3c;
-  --success-bg: #e6f4ea;
-  --warning: #8a5a00;
-  --warning-bg: #fff4d6;
+  --focus: var(--blue);
+  --danger: #c22b3c;
+  --danger-bg: #fbe8ea;
+  --success: #1b7a4d;
+  --success-bg: #e5f5ec;
+  --warning: #9a6400;
+  --warning-bg: #fff2d9;
   --info: #0b5cad;
   --info-bg: #e5f0fb;
-  --radius: 10px;
-  --shadow: 0 1px 2px rgb(16 35 47 / 8%), 0 4px 12px rgb(16 35 47 / 6%);
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --sidebar-w: 220px;
+  --topbar-h: 56px;
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 16px;
+  --r-xl: 24px;
+  --radius: var(--r-md);
+  --shadow: 0 1px 2px rgb(12 31 63 / 8%), 0 4px 12px rgb(12 31 63 / 6%);
+  font-family: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   font-size: 16px;
   line-height: 1.5;
   color-scheme: light;
 }
 
 :root[data-theme='dark'] {
-  --bg: #0f1a22;
-  --surface: #17252f;
-  --surface-2: #1e303c;
-  --text: #e8eef2;
-  --text-soft: #a9b8c3;
-  --border: #2c4250;
-  --primary: #4cc3e0;
-  --primary-strong: #7fd6ec;
-  --on-primary: #06222b;
-  --focus: #7fd6ec;
+  --navy: #0a1730;
+  --navy-soft: #142b52;
+  --bg: #0f1726;
+  --surface: #17213a;
+  --surface-2: #1d2a45;
+  --text: #e8ecf5;
+  --text-soft: #a7b0c3;
+  --border: #2b3a5a;
+  --blue: #5b9bf5;
+  --blue-strong: #8ab8f8;
+  --primary: var(--blue);
+  --primary-strong: var(--blue-strong);
+  --on-primary: #06132b;
+  --focus: var(--blue);
   --danger: #ff8a80;
   --danger-bg: #3a1d1b;
   --success: #7fd69c;
@@ -53,16 +69,20 @@
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
-    --bg: #0f1a22;
-    --surface: #17252f;
-    --surface-2: #1e303c;
-    --text: #e8eef2;
-    --text-soft: #a9b8c3;
-    --border: #2c4250;
-    --primary: #4cc3e0;
-    --primary-strong: #7fd6ec;
-    --on-primary: #06222b;
-    --focus: #7fd6ec;
+    --navy: #0a1730;
+    --navy-soft: #142b52;
+    --bg: #0f1726;
+    --surface: #17213a;
+    --surface-2: #1d2a45;
+    --text: #e8ecf5;
+    --text-soft: #a7b0c3;
+    --border: #2b3a5a;
+    --blue: #5b9bf5;
+    --blue-strong: #8ab8f8;
+    --primary: var(--blue);
+    --primary-strong: var(--blue-strong);
+    --on-primary: #06132b;
+    --focus: var(--blue);
     --danger: #ff8a80;
     --danger-bg: #3a1d1b;
     --success: #7fd69c;
@@ -438,7 +458,12 @@ tbody tr:last-child td {
 td.num,
 th.num {
   text-align: right;
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
   font-variant-numeric: tabular-nums;
+}
+
+.summary-card .metric {
+  font-family: 'IBM Plex Mono', ui-monospace, monospace;
 }
 
 .pager {
