@@ -19,7 +19,7 @@ const ROLE_LABEL: Record<string, string> = {
   OPTOMETRIST: 'Optómetra',
 };
 
-/** Navigation and layout shared by every portal. */
+/** Navigation and layout shared by every portal: a navy sidebar plus a topbar for the session. */
 export function Shell(): ReactNode {
   const user = useSessionUser();
   const [theme, setTheme] = useState<Theme>(currentTheme);
@@ -40,7 +40,7 @@ export function Shell(): ReactNode {
       <a className="skip-link" href="#main">
         Saltar al contenido
       </a>
-      <header className="topbar">
+      <aside className="sidebar">
         <span className="brand">OptiView</span>
         <nav aria-label="Principal" className="menu">
           {navigation
@@ -51,6 +51,8 @@ export function Shell(): ReactNode {
               </NavLink>
             ))}
         </nav>
+      </aside>
+      <header className="topbar">
         <div className="session">
           <span className="who">
             {user?.fullName}
