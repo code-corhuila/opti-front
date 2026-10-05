@@ -50,14 +50,21 @@ interface RemoteViewProps<P extends object> {
   props: P;
 }
 
-/** Loads a portal on demand inside its own boundary. Retrying downloads it again. */
+/**
+ * Loads a portal on demand inside its own boundary. Retrying downloads it again.
+ *
+ * `load` must be in both the memo's deps and the boundary's key: `PortalRoute` renders this same
+ * component at the same position in the tree for every portal (only `label`/`load`/`props`
+ * change), so switching portals directly - Pacientes to Ventas, no stop at Inicio in between -
+ * never unmounts it. Without `load` here the memo kept the previous portal's lazy component
+ * forever; without it in the key, a Boundary that had already failed for one portal stayed
+ * failed for the next one too.
+ */
 export function RemoteView<P extends object>({ label, load, props }: RemoteViewProps<P>): ReactNode {
   const [attempt, setAttempt] = useState(0);
-  // A new lazy component per attempt: React caches a failed import, so a retry needs a fresh one.
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const Remote = useMemo(() => lazy(load), [attempt]);
+  const Remote = useMemo(() => lazy(load), [load, attempt]);
   return (
-    <Boundary key={attempt} label={label} onRetry={() => setAttempt((n) => n + 1)}>
+    <Boundary key={`${label}:${attempt}`} label={label} onRetry={() => setAttempt((n) => n + 1)}>
       <Suspense
         fallback={
           <div className="state" role="status" aria-busy="true">
