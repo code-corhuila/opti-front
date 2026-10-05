@@ -44,7 +44,8 @@ export function createApiClient({
     if (credential) {
       headers.Authorization = `Bearer ${credential}`;
     }
-    if (body !== undefined) {
+    const isFormData = typeof FormData !== 'undefined' && body instanceof FormData;
+    if (body !== undefined && !isFormData) {
       headers['Content-Type'] = 'application/json';
     }
     if (options.idempotencyKey) {
@@ -60,7 +61,7 @@ export function createApiClient({
       response = await fetcher(baseUrl + withQuery(path, options.query), {
         method,
         headers,
-        body: body === undefined ? null : JSON.stringify(body),
+        body: body === undefined ? null : isFormData ? (body as FormData) : JSON.stringify(body),
         signal: cancelled,
       });
     } catch (error) {
