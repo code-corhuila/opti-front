@@ -973,29 +973,6 @@ th.num {
   font-weight: 700;
 }
 
-/* Avatar fallback: initials in a circle. Temporary, used until SharedUi.Avatar (built in opti-front's
-   shared contract) lands here and the portals can switch to ui.Avatar. */
-.avatar-fallback {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  width: 1.75rem;
-  height: 1.75rem;
-  border-radius: 999px;
-  background: var(--primary);
-  color: var(--on-primary);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-}
-
-.avatar-fallback-lg {
-  width: 3.5rem;
-  height: 3.5rem;
-  font-size: 1.25rem;
-}
-
 .user-cell {
   display: inline-flex;
   align-items: center;
@@ -1035,6 +1012,12 @@ th.num {
   align-items: center;
   gap: 1rem;
   margin-bottom: 1rem;
+}
+
+.profile-header .avatar {
+  width: 3.5rem;
+  height: 3.5rem;
+  font-size: 1.25rem;
 }
 
 .profile-header h2 {
