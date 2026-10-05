@@ -852,6 +852,51 @@ th.num {
   background: var(--danger-bg);
 }
 
+/* Avatar: initials in a circle, color picked deterministically from the name over this fixed
+   palette (SharedUi.Avatar). Every variant reuses an existing token: the paired `*-bg` tokens
+   where one exists, or a light mix of the token otherwise. No new raw colors. */
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  font-size: 0.8rem;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.avatar-0 {
+  background: color-mix(in srgb, var(--primary) 18%, var(--surface));
+  color: var(--primary);
+}
+
+.avatar-1 {
+  background: var(--success-bg);
+  color: var(--success);
+}
+
+.avatar-2 {
+  background: var(--warning-bg);
+  color: var(--warning);
+}
+
+.avatar-3 {
+  background: var(--info-bg);
+  color: var(--info);
+}
+
+.avatar-4 {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+
+.avatar-5 {
+  background: color-mix(in srgb, var(--navy) 18%, var(--surface));
+  color: var(--navy);
+}
+
 .toasts {
   position: fixed;
   right: 1rem;

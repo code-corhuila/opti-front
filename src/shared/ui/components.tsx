@@ -151,3 +151,36 @@ export function Banner({ kind, title, children }: { kind: 'error' | 'info' | 'su
 export function Badge({ tone, children }: { tone: 'neutral' | 'info' | 'success' | 'warning' | 'danger'; children: ReactNode }): ReactNode {
   return <span className={`badge badge-${tone}`}>{children}</span>;
 }
+
+/** Number of color variants in `.avatar-0`..`.avatar-5` (styles.css); keep both in sync. */
+const AVATAR_COLORS = 6;
+
+/** First letter of the first word plus first letter of the last word, upper-cased. */
+function initialsOf(name: string): string {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) {
+    return '';
+  }
+  const first = parts[0]!.charAt(0);
+  const last = parts.length > 1 ? parts[parts.length - 1]!.charAt(0) : '';
+  return (first + last).toUpperCase();
+}
+
+/** A simple, deterministic hash so the same name always picks the same color. */
+function paletteIndexOf(name: string): number {
+  let hash = 0;
+  for (let i = 0; i < name.length; i += 1) {
+    hash = (hash * 31 + name.charCodeAt(i)) % AVATAR_COLORS;
+  }
+  return Math.abs(hash) % AVATAR_COLORS;
+}
+
+/** A colored circle with a person's initials; shared so no portal draws its own. */
+export function Avatar({ name }: { name: string }): ReactNode {
+  const index = paletteIndexOf(name);
+  return (
+    <span className={`avatar avatar-${index}`} aria-hidden="true" title={name}>
+      {initialsOf(name)}
+    </span>
+  );
+}
