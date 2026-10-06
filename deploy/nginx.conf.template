@@ -25,24 +25,32 @@ server {
     # virtual-hosted, so $proxy_host behaves the same as a hardcoded Host did.
     location /remotes/auth/ {
         proxy_ssl_server_name on;
+        proxy_ssl_name $proxy_host;
+        proxy_ssl_protocols TLSv1.2 TLSv1.3;
         proxy_set_header Host $proxy_host;
         proxy_pass ${AUTH_PORTAL_URL}/remotes/auth/;
     }
 
     location /remotes/customers/ {
         proxy_ssl_server_name on;
+        proxy_ssl_name $proxy_host;
+        proxy_ssl_protocols TLSv1.2 TLSv1.3;
         proxy_set_header Host $proxy_host;
         proxy_pass ${CUSTOMERS_PORTAL_URL}/remotes/customers/;
     }
 
     location /remotes/products/ {
         proxy_ssl_server_name on;
+        proxy_ssl_name $proxy_host;
+        proxy_ssl_protocols TLSv1.2 TLSv1.3;
         proxy_set_header Host $proxy_host;
         proxy_pass ${PRODUCTS_PORTAL_URL}/remotes/products/;
     }
 
     location /remotes/sales/ {
         proxy_ssl_server_name on;
+        proxy_ssl_name $proxy_host;
+        proxy_ssl_protocols TLSv1.2 TLSv1.3;
         proxy_set_header Host $proxy_host;
         proxy_pass ${SALES_PORTAL_URL}/remotes/sales/;
     }
