@@ -32,6 +32,16 @@ const ICONS: Record<string, ReactNode> = {
       <path d="M4 17c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5" />
     </>
   ),
+  '/customers/optometry': (
+    <>
+      <circle cx="6.5" cy="10" r="3" />
+      <circle cx="13.5" cy="10" r="3" />
+      <path d="M9.5 10h1M3.5 10c0-1.5 1-2.5 2-2.5M16.5 10c0-1.5-1-2.5-2-2.5" />
+    </>
+  ),
+  '/sales/reports': (
+    <path d="M3.5 16.5h13M5.5 16.5V11M9.5 16.5V7M13.5 16.5v-5.5M16.5 16.5V4" />
+  ),
 };
 
 /** Falls back to a generic dot when a route has no icon mapped. */
