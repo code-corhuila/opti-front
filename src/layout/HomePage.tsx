@@ -54,6 +54,35 @@ const TONE_COLOR: Record<'neutral' | 'info' | 'success' | 'warning' | 'danger', 
   danger: 'var(--danger)',
 };
 
+const PATIENT_ICON = (
+  <>
+    <circle cx="10" cy="7" r="3" />
+    <path d="M4 17c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5" />
+  </>
+);
+
+const OVERDUE_ICON = (
+  <>
+    <path d="M10 2.5 2.5 16.5h15Z" />
+    <path d="M10 8.5v3.5M10 14.5h.01" />
+  </>
+);
+
+const FRAME_ICON = (
+  <>
+    <circle cx="6" cy="10" r="3" />
+    <circle cx="14" cy="10" r="3" />
+    <path d="M9 10h2M3 10 1.5 8M17 10l1.5-2" />
+  </>
+);
+
+const CLIPBOARD_ICON = (
+  <>
+    <rect x="4.5" y="3.5" width="11" height="14" rx="1.5" />
+    <path d="M7.5 3.5V3a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v.5M7 9h6M7 12.5h6M7 16h3.5" />
+  </>
+);
+
 function formatCents(cents: number): string {
   return `$ ${Math.round(cents / 100).toLocaleString('es-CO')}`;
 }
@@ -84,14 +113,8 @@ function PatientCards({ shell }: { shell: ShellContext }): ReactNode {
     <ui.DataState state={state} onRetry={reload}>
       {(summary) => (
         <>
-          <div className="summary-card">
-            <p>Pacientes activos</p>
-            <div className="metric">{summary.active}</div>
-          </div>
-          <div className="summary-card">
-            <p>Controles vencidos</p>
-            <div className="metric">{summary.pendingControls}</div>
-          </div>
+          <ui.StatCard icon={PATIENT_ICON} tone="success" label="Pacientes activos" value={summary.active} />
+          <ui.StatCard icon={OVERDUE_ICON} tone="danger" label="Controles vencidos" value={summary.pendingControls} />
         </>
       )}
     </ui.DataState>
@@ -105,10 +128,7 @@ function FramesCard({ shell }: { shell: ShellContext }): ReactNode {
   return (
     <ui.DataState state={state} onRetry={reload}>
       {(summary) => (
-        <div className="summary-card">
-          <p>Monturas en inventario</p>
-          <div className="metric">{summary.totalReferences}</div>
-        </div>
+        <ui.StatCard icon={FRAME_ICON} tone="primary" label="Monturas en inventario" value={summary.totalReferences} />
       )}
     </ui.DataState>
   );
@@ -121,10 +141,7 @@ function PendingApprovalCard({ shell }: { shell: ShellContext }): ReactNode {
   return (
     <ui.DataState state={state} onRetry={reload}>
       {(total) => (
-        <div className="summary-card">
-          <p>Órdenes por aprobar</p>
-          <div className="metric">{total}</div>
-        </div>
+        <ui.StatCard icon={CLIPBOARD_ICON} tone="warning" label="Órdenes por aprobar" value={total} />
       )}
     </ui.DataState>
   );
