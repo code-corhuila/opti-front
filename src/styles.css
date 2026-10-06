@@ -26,6 +26,8 @@
   --warning-bg: #fff2d9;
   --info: #0b5cad;
   --info-bg: #e5f0fb;
+  --purple: #6d42c1;
+  --purple-bg: #eee6ff;
   --sidebar-w: 220px;
   --topbar-h: 56px;
   --r-sm: 6px;
@@ -63,6 +65,8 @@
   --warning-bg: #3a2f12;
   --info: #8ec3f5;
   --info-bg: #14293d;
+  --purple: #c3a6f7;
+  --purple-bg: #2a1f45;
   --shadow: 0 1px 2px rgb(0 0 0 / 40%);
   color-scheme: dark;
 }
@@ -91,6 +95,8 @@
     --warning-bg: #3a2f12;
     --info: #8ec3f5;
     --info-bg: #14293d;
+    --purple: #c3a6f7;
+    --purple-bg: #2a1f45;
     --shadow: 0 1px 2px rgb(0 0 0 / 40%);
     color-scheme: dark;
   }
@@ -151,7 +157,7 @@ a {
 .sidebar {
   grid-row: 1 / -1;
   grid-column: 1;
-  background: var(--navy);
+  background: linear-gradient(180deg, var(--navy), color-mix(in srgb, var(--navy) 70%, black));
   color: #cfd9ec;
   display: flex;
   flex-direction: column;
@@ -850,6 +856,111 @@ th.num {
 .badge-danger {
   color: var(--danger);
   background: var(--danger-bg);
+}
+
+.badge-purple {
+  color: var(--purple);
+  background: var(--purple-bg);
+}
+
+/* Icon badge: the colored rounded-square icon used by StatCard and SectionHeading. */
+.icon-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: var(--r-md);
+}
+
+.icon-badge-lg {
+  width: 3.5rem;
+  height: 3.5rem;
+}
+
+.icon-badge-sm {
+  width: 2.25rem;
+  height: 2.25rem;
+}
+
+.icon-badge-primary {
+  background: var(--info-bg);
+  color: var(--primary);
+}
+
+.icon-badge-success {
+  background: var(--success-bg);
+  color: var(--success);
+}
+
+.icon-badge-warning {
+  background: var(--warning-bg);
+  color: var(--warning);
+}
+
+.icon-badge-danger {
+  background: var(--danger-bg);
+  color: var(--danger);
+}
+
+.icon-badge-info {
+  background: var(--info-bg);
+  color: var(--info);
+}
+
+.icon-badge-purple {
+  background: var(--purple-bg);
+  color: var(--purple);
+}
+
+/* Stat card: a KPI number with its icon badge (replaces the old plain .summary-card). */
+.stat-card {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1rem 1.25rem;
+  min-height: 6.5rem;
+}
+
+.stat-card-label {
+  margin: 0;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--text-soft);
+}
+
+.stat-card-value {
+  margin: 0.2rem 0;
+  font-size: 1.7rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.stat-card-hint {
+  margin: 0;
+  font-size: 0.82rem;
+  color: var(--text-soft);
+}
+
+/* Section heading: icon + title + description, above a form's fieldset. */
+.section-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.section-heading h3 {
+  margin: 0;
+}
+
+.section-heading p {
+  margin: 0.2rem 0 0;
+  color: var(--text-soft);
+  font-size: 0.88rem;
 }
 
 /* Avatar: initials in a circle, color picked deterministically from the name over this fixed
