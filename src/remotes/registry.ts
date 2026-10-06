@@ -36,6 +36,7 @@ export interface NavItem {
 export const navigation: NavItem[] = [
   { label: 'Inicio', to: '/', roles: ['ADMIN', 'SELLER', 'OPTOMETRIST'] },
   { label: 'Pacientes', to: '/customers', roles: ['ADMIN', 'SELLER', 'OPTOMETRIST'] },
+  { label: 'Optometría', to: '/customers/optometry', roles: ['ADMIN', 'OPTOMETRIST'] },
   { label: 'Inventario', to: '/products', roles: ['ADMIN', 'SELLER', 'OPTOMETRIST'] },
   { label: 'Ventas', to: '/sales', roles: ['ADMIN', 'SELLER'] },
   { label: 'Usuarios', to: '/auth/users', roles: ['ADMIN'] },
