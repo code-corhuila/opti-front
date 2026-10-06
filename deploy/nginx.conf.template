@@ -15,22 +15,25 @@ server {
         add_header Cache-Control "no-store" always;
     }
 
-    # Each portal is a separate image; the container proxies to it so the browser only ever
-    # talks to this origin (one client, one session, per Annex H).
+    # Each portal is a separate image; the container proxies to it so the browser only ever talks
+    # to this origin (one client, one session, per Annex H). Locally (Docker Compose) these default
+    # to the service name on the shared network; on a host like Render, where a free service can
+    # only receive traffic on its public URL (not the private network), the entrypoint substitutes
+    # each portal's public HTTPS URL instead.
     location /remotes/auth/ {
-        proxy_pass http://auth-portal/remotes/auth/;
+        proxy_pass ${AUTH_PORTAL_URL}/remotes/auth/;
     }
 
     location /remotes/customers/ {
-        proxy_pass http://customers-portal/remotes/customers/;
+        proxy_pass ${CUSTOMERS_PORTAL_URL}/remotes/customers/;
     }
 
     location /remotes/products/ {
-        proxy_pass http://products-portal/remotes/products/;
+        proxy_pass ${PRODUCTS_PORTAL_URL}/remotes/products/;
     }
 
     location /remotes/sales/ {
-        proxy_pass http://sales-portal/remotes/sales/;
+        proxy_pass ${SALES_PORTAL_URL}/remotes/sales/;
     }
 
     # remoteEntry.js of the shell itself must never be cached either.
