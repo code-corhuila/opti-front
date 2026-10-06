@@ -275,8 +275,38 @@ a {
 .login-page {
   min-height: 100vh;
   display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.login-left {
+  display: none;
+  background: var(--navy);
+  color: #ffffff;
+  flex-direction: column;
+  justify-content: center;
+  padding: 3rem;
+}
+
+.login-left strong {
+  font-size: 1.6rem;
+  letter-spacing: 0.02em;
+}
+
+.login-left p {
+  color: #b9c4dc;
+  max-width: 320px;
+}
+
+.login-right {
+  display: grid;
   place-items: center;
   padding: 1rem;
+}
+
+@media (min-width: 860px) {
+  .login-left {
+    display: flex;
+  }
 }
 
 .page-header {
