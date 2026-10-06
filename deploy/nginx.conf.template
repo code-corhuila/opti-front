@@ -19,20 +19,31 @@ server {
     # to this origin (one client, one session, per Annex H). Locally (Docker Compose) these default
     # to the service name on the shared network; on a host like Render, where a free service can
     # only receive traffic on its public URL (not the private network), the entrypoint substitutes
-    # each portal's public HTTPS URL instead.
+    # each portal's public HTTPS URL instead - which needs proxy_ssl_server_name (SNI) and a Host
+    # header matching that URL (not this one), or the TLS handshake to an edge-routed host (Render
+    # sits behind Cloudflare) fails outright. Harmless locally: Compose service names aren't
+    # virtual-hosted, so $proxy_host behaves the same as a hardcoded Host did.
     location /remotes/auth/ {
+        proxy_ssl_server_name on;
+        proxy_set_header Host $proxy_host;
         proxy_pass ${AUTH_PORTAL_URL}/remotes/auth/;
     }
 
     location /remotes/customers/ {
+        proxy_ssl_server_name on;
+        proxy_set_header Host $proxy_host;
         proxy_pass ${CUSTOMERS_PORTAL_URL}/remotes/customers/;
     }
 
     location /remotes/products/ {
+        proxy_ssl_server_name on;
+        proxy_set_header Host $proxy_host;
         proxy_pass ${PRODUCTS_PORTAL_URL}/remotes/products/;
     }
 
     location /remotes/sales/ {
+        proxy_ssl_server_name on;
+        proxy_set_header Host $proxy_host;
         proxy_pass ${SALES_PORTAL_URL}/remotes/sales/;
     }
 
