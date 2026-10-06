@@ -26,7 +26,13 @@ function LoginRoute(): ReactNode {
   }
   return (
     <main className="login-page">
-      <RemoteView label="Inicio de sesión" load={loginPage} props={{ shell, onSignedIn: () => navigate(next, { replace: true }) }} />
+      <div className="login-left">
+        <strong>OptiView</strong>
+        <p>Gestión de pacientes, inventario y ventas para tu óptica, en un solo lugar.</p>
+      </div>
+      <div className="login-right">
+        <RemoteView label="Inicio de sesión" load={loginPage} props={{ shell, onSignedIn: () => navigate(next, { replace: true }) }} />
+      </div>
     </main>
   );
 }
