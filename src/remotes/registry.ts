@@ -39,6 +39,7 @@ export const navigation: NavItem[] = [
   { label: 'Optometría', to: '/customers/optometry', roles: ['ADMIN', 'OPTOMETRIST'] },
   { label: 'Inventario', to: '/products', roles: ['ADMIN', 'SELLER', 'OPTOMETRIST'] },
   { label: 'Ventas', to: '/sales', roles: ['ADMIN', 'SELLER'] },
+  { label: 'Reportes', to: '/sales/reports', roles: ['ADMIN'] },
   { label: 'Usuarios', to: '/auth/users', roles: ['ADMIN'] },
   { label: 'Mi cuenta', to: '/auth/account', roles: ['ADMIN', 'SELLER', 'OPTOMETRIST'] },
 ];
