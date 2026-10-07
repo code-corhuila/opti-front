@@ -1,0 +1,84 @@
+server {
+    listen 80;
+    server_name _;
+    root /usr/share/nginx/html;
+    server_tokens off;
+
+    location = /health {
+        access_log off;
+        default_type application/json;
+        return 200 '{"status":"UP"}';
+    }
+
+    # Public photos live at the gateway; never let the SPA fallback answer with HTML.
+    location /media/frames/ {
+        proxy_ssl_server_name on;
+        proxy_set_header Host $proxy_host;
+        proxy_pass ${MEDIA_GATEWAY_URL};
+        proxy_hide_header Cache-Control;
+        proxy_hide_header Expires;
+        add_header Cache-Control "no-cache" always;
+    }
+
+    # Written by the entrypoint from GATEWAY_URL: the only place that knows where the gateway is.
+    location = /config.js {
+        add_header Cache-Control "no-store" always;
+    }
+
+    # Each portal is a separate image; the container proxies to it so the browser only ever talks
+    # to this origin (one client, one session, per Annex H). Locally (Docker Compose) these default
+    # to the service name on the shared network; on a host like Render, where a free service can
+    # only receive traffic on its public URL (not the private network), the entrypoint substitutes
+    # each portal's public HTTPS URL instead - which needs proxy_ssl_server_name (SNI) and a Host
+    # header matching that URL (not this one), or the TLS handshake to an edge-routed host (Render
+    # sits behind Cloudflare) fails outright. Harmless locally: Compose service names aren't
+    # virtual-hosted, so $proxy_host behaves the same as a hardcoded Host did.
+    location /remotes/auth/ {
+        proxy_ssl_server_name on;
+        proxy_ssl_name $proxy_host;
+        proxy_ssl_protocols TLSv1.2 TLSv1.3;
+        proxy_set_header Host $proxy_host;
+        proxy_pass ${AUTH_PORTAL_URL}/remotes/auth/;
+    }
+
+    location /remotes/customers/ {
+        proxy_ssl_server_name on;
+        proxy_ssl_name $proxy_host;
+        proxy_ssl_protocols TLSv1.2 TLSv1.3;
+        proxy_set_header Host $proxy_host;
+        proxy_pass ${CUSTOMERS_PORTAL_URL}/remotes/customers/;
+    }
+
+    location /remotes/products/ {
+        proxy_ssl_server_name on;
+        proxy_ssl_name $proxy_host;
+        proxy_ssl_protocols TLSv1.2 TLSv1.3;
+        proxy_set_header Host $proxy_host;
+        proxy_pass ${PRODUCTS_PORTAL_URL}/remotes/products/;
+    }
+
+    location /remotes/sales/ {
+        proxy_ssl_server_name on;
+        proxy_ssl_name $proxy_host;
+        proxy_ssl_protocols TLSv1.2 TLSv1.3;
+        proxy_set_header Host $proxy_host;
+        proxy_pass ${SALES_PORTAL_URL}/remotes/sales/;
+    }
+
+    # remoteEntry.js of the shell itself must never be cached either.
+    location = /remoteEntry.js {
+        add_header Cache-Control "no-store" always;
+        try_files $uri =404;
+    }
+
+    location /assets/ {
+        add_header Cache-Control "public, max-age=31536000, immutable" always;
+        try_files $uri =404;
+    }
+
+    # Single-page app: any other path serves index.html, so a deep link (e.g. /customers/123)
+    # loads the app and React Router takes over from there.
+    location / {
+        try_files $uri /index.html;
+    }
+}
