@@ -19,9 +19,9 @@ export interface NotificationItem {
 /** Small page: just enough for the dropdown, not a full inbox. */
 const NOTIFICATIONS_LIMIT = 10;
 
-export function listNotifications(signal?: AbortSignal): Promise<Page<NotificationItem>> {
+export function listNotifications(signal?: AbortSignal, page = 1): Promise<Page<NotificationItem>> {
   return apiClient.get<Page<NotificationItem>>('/api/v1/notifications', {
-    query: { limit: NOTIFICATIONS_LIMIT },
+    query: { limit: NOTIFICATIONS_LIMIT, page },
     signal,
   });
 }
