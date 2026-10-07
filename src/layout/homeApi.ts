@@ -76,6 +76,11 @@ export async function lensesTotal(signal?: AbortSignal): Promise<number> {
   return page.meta.total;
 }
 
+export async function catalogTotal(catalog: 'accessories' | 'liquids', signal?: AbortSignal): Promise<number> {
+  const page = await apiClient.get<Page<unknown>>(`/api/v1/${catalog}`, { query: { limit: 1 }, ...(signal ? { signal } : {}) });
+  return page.meta.total;
+}
+
 /** Work orders still waiting for approval (status QUOTATION), counted the same way. */
 export async function pendingApprovalCount(signal?: AbortSignal): Promise<number> {
   const page = await apiClient.get<Page<unknown>>('/api/v1/work-orders', {

@@ -1,10 +1,11 @@
 import type { ReactNode } from 'react';
-import { Link } from 'react-router-dom';
-import { Bar, BarChart, CartesianGrid, Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { Link, useNavigate } from 'react-router-dom';
+import { Bar, BarChart, CartesianGrid, Cell, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 import { useShellContext } from '../core/shellContext';
 import type { ShellContext } from '../shared/contract';
 import {
   framesSummary,
+  catalogTotal,
   lensesTotal,
   ordersByStatus,
   overduePatients,
@@ -36,22 +37,23 @@ const STATUS_LABEL: Record<WorkOrderStatus, string> = {
   CANCELLED: 'Cancelada',
 };
 
-const STATUS_TONE: Record<WorkOrderStatus, 'neutral' | 'info' | 'success' | 'warning' | 'danger'> = {
+const STATUS_TONE: Record<WorkOrderStatus, 'neutral' | 'info' | 'success' | 'warning' | 'danger' | 'purple'> = {
   QUOTATION: 'neutral',
   APPROVED: 'info',
-  IN_LABORATORY: 'info',
+  IN_LABORATORY: 'purple',
   READY: 'warning',
   DELIVERED: 'success',
   CANCELLED: 'danger',
 };
 
 /** Same CSS variables as `.badge-*` (styles.css), so the charts pick up the theme, dark mode included. */
-const TONE_COLOR: Record<'neutral' | 'info' | 'success' | 'warning' | 'danger', string> = {
+const TONE_COLOR: Record<'neutral' | 'info' | 'success' | 'warning' | 'danger' | 'purple', string> = {
   neutral: 'var(--text-soft)',
   info: 'var(--info)',
   success: 'var(--success)',
   warning: 'var(--warning)',
   danger: 'var(--danger)',
+  purple: 'var(--purple)',
 };
 
 const PATIENT_ICON = (
@@ -149,6 +151,7 @@ function PendingApprovalCard({ shell }: { shell: ShellContext }): ReactNode {
 
 /** Sales by day of the current month (HU-24, ADMIN only) — same chart as ReportsPage, sized for the dashboard. */
 function SalesTimeseriesWidget({ shell }: { shell: ShellContext }): ReactNode {
+  const navigate = useNavigate();
   const { ui } = shell;
   const { state, reload } = ui.useLoad((signal) => salesTimeseries(signal), []);
   return (
@@ -162,19 +165,22 @@ function SalesTimeseriesWidget({ shell }: { shell: ShellContext }): ReactNode {
         emptyHint="Las cifras aparecen cuando se registre la primera venta del mes."
       >
         {(data) => (
-          <ResponsiveContainer width="100%" height={220}>
+          <>
+<ResponsiveContainer width="100%" height={220}>
             <BarChart data={data.map((d) => ({ ...d, day: dayLabel(d.date) }))}>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
               <XAxis dataKey="day" stroke="var(--text-soft)" fontSize={12} />
-              <YAxis stroke="var(--text-soft)" fontSize={12} tickFormatter={(value: number) => formatCents(value)} width={80} />
+              <YAxis stroke="var(--text-soft)" fontSize={12} tickFormatter={(value: number) => formatCents(value)} width={105} />
               <Tooltip
                 formatter={(value) => formatCents(Number(value))}
                 labelFormatter={(day) => `Día ${day}`}
                 contentStyle={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
               />
-              <Bar dataKey="totalCents" name="Ventas" fill={TONE_COLOR.info} radius={[4, 4, 0, 0]} />
+              <Bar onClick={(_row, index) => { const row = data[index]; if (row) navigate(`/sales/reports/orders?date=${row.date}`); }} style={{ cursor: 'pointer' }} dataKey="totalCents" name="Ventas" fill={TONE_COLOR.info} radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
+<details><summary>Ver ventas por fecha</summary><div className="chart-legend">{data.map((row) => <Link key={row.date} to={`/sales/reports/orders?date=${row.date}`}>{row.date}: {formatCents(row.totalCents)}</Link>)}</div></details>
+</>
         )}
       </ui.DataState>
     </section>
@@ -183,6 +189,7 @@ function SalesTimeseriesWidget({ shell }: { shell: ShellContext }): ReactNode {
 
 /** Work orders by status (HU-24, ADMIN only) — same donut as ReportsPage, sized for the dashboard. */
 function OrdersByStatusWidget({ shell }: { shell: ShellContext }): ReactNode {
+  const navigate = useNavigate();
   const { ui } = shell;
   const { state, reload } = ui.useLoad((signal) => ordersByStatus(signal), []);
   return (
@@ -196,19 +203,17 @@ function OrdersByStatusWidget({ shell }: { shell: ShellContext }): ReactNode {
         emptyHint="Las cifras aparecen cuando se abra la primera orden."
       >
         {(data) => (
-          <ResponsiveContainer width="100%" height={220}>
+          <>
+<ResponsiveContainer width="100%" height={190}>
             <PieChart>
-              <Pie
+              <Pie onClick={(_row, index) => { const row = data[index]; if (row) navigate(`/sales?status=${row.status}`); }} style={{ cursor: 'pointer' }}
                 data={data}
                 dataKey="count"
                 nameKey="status"
                 cx="50%"
                 cy="50%"
                 outerRadius={80}
-                label={(props) => {
-                  const { status, count } = props as unknown as StatusCount;
-                  return count > 0 ? `${STATUS_LABEL[status]}: ${count}` : '';
-                }}
+                innerRadius={45}
               >
                 {data.map((row) => (
                   <Cell key={row.status} fill={TONE_COLOR[STATUS_TONE[row.status]]} />
@@ -221,43 +226,54 @@ function OrdersByStatusWidget({ shell }: { shell: ShellContext }): ReactNode {
                 }}
                 contentStyle={{ background: 'var(--surface)', border: '1px solid var(--border)' }}
               />
-              <Legend formatter={(_value, entry) => STATUS_LABEL[(entry.payload as unknown as StatusCount).status]} />
             </PieChart>
           </ResponsiveContainer>
+            <div className="chart-legend" aria-label="Ver órdenes por estado">
+              {data.map((row) => (
+                <Link key={row.status} to={`/sales?status=${row.status}`}>
+                  <span className="chart-swatch" style={{ background: TONE_COLOR[STATUS_TONE[row.status]] }} />
+                  {STATUS_LABEL[row.status]} ({row.count})
+                </Link>
+              ))}
+            </div>
+</>
         )}
       </ui.DataState>
     </section>
   );
 }
 
-/**
- * Stock by category: the only two real product categories (Monturas, Lentes) — accessories and
- * liquids are left out because, unlike lenses, there is no cheap "count via an empty page" lookup
- * confirmed for them in this pass, and the brief asks not to invent categories.
- */
+/** Catalog references counted by each products endpoint; these are not stock units. */
 function StockByCategoryWidget({ shell }: { shell: ShellContext }): ReactNode {
   const { ui } = shell;
+  const navigate = useNavigate();
   const { state, reload } = ui.useLoad(async (signal) => {
-    const [frames, lenses] = await Promise.all([framesSummary(signal), lensesTotal(signal)]);
+    const [frames, lenses, accessories, liquids] = await Promise.all([
+      framesSummary(signal), lensesTotal(signal), catalogTotal('accessories', signal), catalogTotal('liquids', signal),
+    ]);
     return [
-      { category: 'Monturas', total: frames.totalReferences },
-      { category: 'Lentes', total: lenses },
+      { category: 'Monturas', total: frames.totalReferences, route: '/products' },
+      { category: 'Lentes', total: lenses, route: '/products/lenses' },
+      { category: 'Accesorios', total: accessories, route: '/products/accessories' },
+      { category: 'Líquidos', total: liquids, route: '/products/liquids' },
     ];
   }, []);
   return (
     <section className="card">
-      <h2>Stock por categoría</h2>
+      <h2>Referencias por categoría</h2>
       <ui.DataState state={state} onRetry={reload}>
         {(data) => (
-          <ResponsiveContainer width="100%" height={220}>
+          <><ResponsiveContainer width="100%" height={220}>
             <BarChart data={data}>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-              <XAxis dataKey="category" stroke="var(--text-soft)" fontSize={12} />
+              <XAxis dataKey="category" stroke="var(--text-soft)" fontSize={10} interval={0} angle={-25} textAnchor="end" height={45} />
               <YAxis stroke="var(--text-soft)" fontSize={12} allowDecimals={false} />
               <Tooltip contentStyle={{ background: 'var(--surface)', border: '1px solid var(--border)' }} />
-              <Bar dataKey="total" name="Referencias" fill={TONE_COLOR.success} radius={[4, 4, 0, 0]} />
+              <Bar onClick={(_row, index) => { const row = data[index]; if (row) navigate(row.route); }} style={{ cursor: 'pointer' }} dataKey="total" name="Referencias" fill={TONE_COLOR.success} radius={[4, 4, 0, 0]} />
             </BarChart>
-          </ResponsiveContainer>
+          </ResponsiveContainer><div className="chart-legend" aria-label="Ver inventario por categoría">
+            {data.map((row) => <Link key={row.category} to={row.route}>{row.category} ({row.total})</Link>)}
+          </div></>
         )}
       </ui.DataState>
     </section>
