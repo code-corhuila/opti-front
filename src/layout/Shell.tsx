@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { NavLink, Outlet } from 'react-router-dom';
+import { Link, Outlet, useLocation } from 'react-router-dom';
 import { hasRole, signOut, useSessionUser } from '../core/auth/session';
 import { NavIcon } from './NavIcons';
 import { navigation } from '../remotes/registry';
@@ -28,6 +28,11 @@ const ROLE_LABEL: Record<string, string> = {
 /** Navigation and layout shared by every portal: a navy sidebar plus a topbar for the session. */
 export function Shell(): ReactNode {
   const user = useSessionUser();
+  const { pathname } = useLocation();
+  const activeNavigation = navigation
+    .filter((item) => hasRole(user, ...item.roles))
+    .filter((item) => pathname === item.to || (item.to !== '/' && pathname.startsWith(`${item.to}/`)))
+    .sort((a, b) => b.to.length - a.to.length)[0]?.to;
   const [theme, setTheme] = useState<Theme>(currentTheme);
   const [bellOpen, setBellOpen] = useState(false);
   const [items, setItems] = useState<NotificationItem[]>([]);
@@ -43,7 +48,11 @@ export function Shell(): ReactNode {
 
   useEffect(() => {
     const timer = setInterval(reload, NOTIFICATIONS_POLL_MS);
-    return () => clearInterval(timer);
+    window.addEventListener('opti:notifications-changed', reload);
+    return () => {
+      clearInterval(timer);
+      window.removeEventListener('opti:notifications-changed', reload);
+    };
   }, [reload]);
 
   useEffect(() => {
@@ -105,12 +114,13 @@ export function Shell(): ReactNode {
           {navigation
             .filter((item) => hasRole(user, ...item.roles))
             .map((item) => (
-              <NavLink key={item.to} to={item.to} end={item.to === '/'} className={({ isActive }) => (isActive ? 'active' : '')}>
+              <Link key={item.to} to={item.to} aria-current={activeNavigation === item.to ? 'page' : undefined} className={activeNavigation === item.to ? 'active' : ''}>
                 <NavIcon to={item.to} />
                 {item.label}
-              </NavLink>
+              </Link>
             ))}
         </nav>
+        <div className="sidebar-footer"><strong>OptiView</strong>Sistema administrativo para ópticas</div>
       </aside>
       <header className="topbar">
         <div className="session">
@@ -162,13 +172,13 @@ export function Shell(): ReactNode {
                     ))}
                   </ul>
                 )}
-                <a
+                <Link
                   className="notif-dropdown-footer"
-                  href="#"
-                  onClick={(event) => event.preventDefault()}
+                  to="/notifications"
+                  onClick={() => setBellOpen(false)}
                 >
                   Ver todas
-                </a>
+                </Link>
               </div>
             )}
           </div>

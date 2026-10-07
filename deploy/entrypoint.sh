@@ -15,7 +15,9 @@ EOF
 : "${PRODUCTS_PORTAL_URL:=http://products-portal}"
 : "${SALES_PORTAL_URL:=http://sales-portal}"
 export AUTH_PORTAL_URL CUSTOMERS_PORTAL_URL PRODUCTS_PORTAL_URL SALES_PORTAL_URL
-envsubst '${AUTH_PORTAL_URL} ${CUSTOMERS_PORTAL_URL} ${PRODUCTS_PORTAL_URL} ${SALES_PORTAL_URL}' \
+: "${MEDIA_GATEWAY_URL:=http://api-gateway:8000}"
+export MEDIA_GATEWAY_URL
+envsubst '${AUTH_PORTAL_URL} ${CUSTOMERS_PORTAL_URL} ${PRODUCTS_PORTAL_URL} ${SALES_PORTAL_URL} ${MEDIA_GATEWAY_URL}' \
     < /etc/nginx/shell-template/shell.conf.template > /etc/nginx/conf.d/shell.conf
 
 exec "$@"
