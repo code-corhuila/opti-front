@@ -10,6 +10,16 @@ server {
         return 200 '{"status":"UP"}';
     }
 
+    # Public photos live at the gateway; never let the SPA fallback answer with HTML.
+    location /media/frames/ {
+        proxy_ssl_server_name on;
+        proxy_set_header Host $proxy_host;
+        proxy_pass ${MEDIA_GATEWAY_URL};
+        proxy_hide_header Cache-Control;
+        proxy_hide_header Expires;
+        add_header Cache-Control "no-cache" always;
+    }
+
     # Written by the entrypoint from GATEWAY_URL: the only place that knows where the gateway is.
     location = /config.js {
         add_header Cache-Control "no-store" always;

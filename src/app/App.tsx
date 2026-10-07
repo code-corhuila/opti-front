@@ -7,6 +7,7 @@ import { usePublicContext, useShellContext } from '../core/shellContext';
 import { HomePage } from '../layout/HomePage';
 import { NotFound } from '../layout/NotFound';
 import { Shell } from '../layout/Shell';
+import { NotificationsPage } from '../layout/NotificationsPage';
 import { loginPage, portals, type PortalId } from '../remotes/registry';
 
 /** Only paths inside the application are accepted after signing in (no open redirect). */
@@ -57,6 +58,7 @@ export function App(): ReactNode {
         }
       >
         <Route index element={<HomePage />} />
+        <Route path="notifications" element={<NotificationsPage />} />
         <Route path="customers/*" element={<PortalRoute id="customers" label="Pacientes" />} />
         <Route path="products/*" element={<PortalRoute id="products" label="Inventario" />} />
         <Route path="sales/*" element={<PortalRoute id="sales" label="Ventas" />} />
