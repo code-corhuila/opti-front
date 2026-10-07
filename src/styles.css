@@ -4,11 +4,11 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
 
 :root {
-  --navy: #0c1f3f;
+  --navy: #0b2347;
   --navy-soft: #142b52;
-  --blue: #1d6fe8;
+  --blue: #1677ff;
   --blue-strong: #1558b8;
-  --bg: #f4f6fa;
+  --bg: #f3f7fc;
   --surface: #ffffff;
   --surface-2: #eef1f7;
   --text: #0f1b2e;
@@ -28,8 +28,8 @@
   --info-bg: #e5f0fb;
   --purple: #6d42c1;
   --purple-bg: #eee6ff;
-  --sidebar-w: 220px;
-  --topbar-h: 56px;
+  --sidebar-w: 235px;
+  --topbar-h: 68px;
   --r-sm: 6px;
   --r-md: 10px;
   --r-lg: 16px;
@@ -172,7 +172,7 @@ a {
 .brand {
   display: block;
   font-weight: 700;
-  font-size: 1.1rem;
+  font-size: 1.6rem;
   color: #ffffff;
   letter-spacing: 0.02em;
   padding: 0.4rem 0.6rem 1.1rem;
@@ -181,14 +181,14 @@ a {
 .menu {
   display: flex;
   flex-direction: column;
-  gap: 0.15rem;
+  gap: 0.4rem;
 }
 
 .menu a {
   display: flex;
   align-items: center;
   gap: 0.6rem;
-  padding: 0.55rem 0.75rem;
+  padding: 0.7rem 0.75rem;
   border-radius: var(--r-sm);
   text-decoration: none;
   color: #b9c4dc;
@@ -934,7 +934,7 @@ th.num {
 
 .stat-card-value {
   margin: 0.2rem 0;
-  font-size: 1.7rem;
+  font-size: clamp(1.2rem, 1.7vw, 1.7rem);
   font-weight: 700;
   line-height: 1.1;
 }
@@ -1202,3 +1202,60 @@ th.num {
     padding: 0.5rem 0.6rem;
   }
 }
+
+/* Account rows and the shell footer use the shared light/dark tokens. */
+.account-facts { margin: 0; }
+.account-fact { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1rem; align-items: center; padding: 1rem 0; border-bottom: 1px solid var(--border); }
+.account-fact:last-child { border-bottom: 0; }
+.account-fact dt { display: flex; gap: 0.85rem; align-items: center; font-weight: 600; }
+.account-fact small { display: block; font-weight: 400; color: var(--text-soft); margin-top: 0.2rem; }
+.account-fact dd { margin: 0; text-align: right; overflow-wrap: anywhere; }
+.account-fact-icon { flex: none; color: var(--primary); }
+.sidebar-footer { margin-top: auto; padding: 0.9rem; border: 1px solid var(--navy-soft); border-radius: var(--radius); font-size: 0.75rem; }
+.sidebar-footer strong { display: block; margin-bottom: 0.25rem; }
+.stat-card > div { min-width: 0; }
+.summary-grid { margin-bottom: 1.25rem; }
+@media (max-width: 640px) {
+  .account-fact { grid-template-columns: 1fr; gap: 0.4rem; }
+  .account-fact dd { text-align: left; padding-left: 2.35rem; }
+  .sidebar-footer { display: none; }
+}
+
+/* Four metrics stay in a balanced row, or two columns on a smaller desktop. */
+.summary-grid:has(> :nth-child(4)) { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 1200px) {
+  .summary-grid, .summary-grid:has(> :nth-child(4)) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+  .summary-grid, .summary-grid:has(> :nth-child(4)) { grid-template-columns: 1fr; }
+}
+.notification-row { display: flex; align-items: center; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--border); }
+.notification-row:last-child { border-bottom: 0; }
+.notification-row > div { flex: 1; min-width: 0; }
+.notification-row h2 { font-size: 1rem; margin: 0 0 0.3rem; }
+.notification-row time { color: var(--text-soft); font-size: 0.85rem; }
+.notification-icon { display: grid; place-items: center; flex: none; width: 3rem; height: 3rem; border-radius: var(--radius); color: var(--info); background: var(--info-bg); }
+@media (max-width: 860px) { .sidebar-footer { display: none; } }
+@media (max-width: 640px) { .notification-row { flex-wrap: wrap; } }
+
+/* Let the grid shrink; wide tables scroll inside their own container on mobile. */
+.content, .sidebar, .topbar { min-width: 0; }
+@media (max-width: 860px) {
+  .brand { flex: none; }
+  .menu { flex: none; }
+  .menu a { white-space: nowrap; }
+}
+
+/* Keep currency amounts together when four cards would be too narrow. */
+.stat-card-value { white-space: nowrap; }
+@media (max-width: 1320px) {
+  .summary-grid:has(> :nth-child(4)) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+  .summary-grid:has(> :nth-child(4)) { grid-template-columns: 1fr; }
+}
+
+.chart-legend { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 16px; margin-top: 8px; }
+.chart-legend a { display: inline-flex; align-items: center; gap: 6px; color: var(--text); font-size: .85rem; text-decoration: none; }
+.chart-legend a:hover { text-decoration: underline; }
+.chart-swatch { width: 10px; height: 10px; border-radius: 3px; flex: none; }

@@ -2,6 +2,8 @@ import type { ReactNode } from 'react';
 
 /** Small stroke icons for the sidebar, one per route. 20x20, inherits color from the link. */
 const ICONS: Record<string, ReactNode> = {
+  '/notifications': <path d="M5 8a5 5 0 0 1 10 0v4l2 3H3l2-3V8ZM8 17h4" />,
+  '/sales/billing': <><rect x="4" y="2.5" width="12" height="15" rx="2" /><path d="M7 6h6M7 10h6M7 14h3" /></>,
   '/': (
     <path d="M3 10.5 10 4l7 6.5M5 9v7a1 1 0 0 0 1 1h3v-4.5h2V17h3a1 1 0 0 0 1-1V9" />
   ),
