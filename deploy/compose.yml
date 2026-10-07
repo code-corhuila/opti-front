@@ -1,0 +1,21 @@
+# The container: only opti-front and opti-api-gateway publish a port to the host.
+name: opti-front
+
+services:
+  front:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile
+    image: opti/front:local
+    environment:
+      GATEWAY_URL: ${GATEWAY_PUBLIC_URL:-http://localhost:8000}
+      MEDIA_GATEWAY_URL: ${MEDIA_GATEWAY_URL:-http://api-gateway:8000}
+    ports:
+      - "${FRONT_PORT:-3000}:80"
+    networks:
+      - platform
+    restart: unless-stopped
+
+networks:
+  platform:
+    external: true
