@@ -60,6 +60,7 @@ export function NavIcon({ to }: { to: string }): ReactNode {
       strokeLinecap="round"
       strokeLinejoin="round"
       aria-hidden="true"
+      focusable="false"
     >
       {ICONS[to] ?? <circle cx="10" cy="10" r="3" />}
     </svg>
