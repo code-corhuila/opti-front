@@ -21,3 +21,9 @@ describe('Spanish API errors', () => {
     expect(translateFieldMessage('must have between 1 and 80 characters')).toContain('1 y 80 caracteres');
   });
 });
+
+// Spanish domain errors are already suitable for display next to the input.
+it('preserves actionable Spanish field validation', () => {
+  expect(toApiErrorInfo(400, { details: [{ field: 'otp', message: 'Código incorrecto. Quedan 2 intentos.' }] }, 'test').details[0]?.message)
+    .toBe('Código incorrecto. Quedan 2 intentos.');
+});

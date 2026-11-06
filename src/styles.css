@@ -196,8 +196,11 @@ a {
 }
 
 .nav-icon {
-  flex: none;
-  opacity: 0.85;
+  display: block;
+  flex: 0 0 20px;
+  width: 20px;
+  height: 20px;
+  opacity: 1;
 }
 
 .menu a.active .nav-icon,
@@ -212,7 +215,7 @@ a {
 
 .menu a.active {
   background: var(--blue);
-  color: #ffffff;
+  color: var(--on-primary);
 }
 
 .topbar {
@@ -250,7 +253,7 @@ a {
   position: relative;
 }
 
-.bell-trigger {
+.btn.bell-trigger {
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -258,6 +261,13 @@ a {
   width: 2.25rem;
   height: 2.25rem;
   padding: 0;
+}
+
+.bell-trigger svg {
+  display: block;
+  flex: 0 0 20px;
+  width: 20px;
+  height: 20px;
 }
 
 .bell-badge {
@@ -882,9 +892,15 @@ th.num {
   height: 2.25rem;
 }
 
+.icon-badge svg {
+  display: block;
+  flex: none;
+  overflow: visible;
+}
+
 .icon-badge-primary {
   background: var(--info-bg);
-  color: var(--primary);
+  color: var(--info);
 }
 
 .icon-badge-success {
