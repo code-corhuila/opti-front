@@ -37,7 +37,7 @@ export function createApiClient({
   async function request<T>(method: string, path: string, body: unknown, options: RequestOptions = {}): Promise<T> {
     const correlationId = newId();
     const headers: Record<string, string> = {
-      Accept: 'application/json',
+      Accept: options.responseType === 'blob' ? 'application/pdf, image/png, image/jpeg' : 'application/json',
       'X-Correlation-Id': correlationId,
     };
     const credential = token();
@@ -74,7 +74,7 @@ export function createApiClient({
       clearTimeout(timer);
     }
 
-    const payload = await readBody(response);
+    const payload = response.ok && options.responseType === 'blob' ? await response.blob() : await readBody(response);
     if (response.ok) {
       return payload as T;
     }
