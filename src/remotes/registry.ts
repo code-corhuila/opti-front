@@ -41,7 +41,6 @@ export const navigation: NavItem[] = [
   { label: 'Órdenes', to: '/sales', roles: ['ADMIN', 'SELLER'] },
   { label: 'Ventas y facturación', to: '/sales/billing', roles: ['ADMIN', 'SELLER'] },
   { label: 'Reportes', to: '/sales/reports', roles: ['ADMIN'] },
-  { label: 'Notificaciones', to: '/notifications', roles: ['ADMIN', 'SELLER', 'OPTOMETRIST'] },
   { label: 'Usuarios', to: '/auth/users', roles: ['ADMIN'] },
   { label: 'Mi cuenta', to: '/auth/account', roles: ['ADMIN', 'SELLER', 'OPTOMETRIST'] },
 ];
