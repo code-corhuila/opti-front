@@ -49,3 +49,11 @@ same build runs in develop, qa and main — only the environment variable change
 
 The four portals (`opti-auth-portal`, `opti-customers-portal`, `opti-products-portal`,
 `opti-sales-portal`) as remotes, and `opti-api-gateway` as the only door to the domains.
+
+## Documentos, iconos y navegación
+
+El cliente compartido admite `RequestOptions.responseType: 'blob'` para descargar documentos autenticados sin entregar tokens a los portales. Mantiene errores JSON y cierre de sesión ante 401; los contratos antiguos siguen funcionando sin esta opción. Los mensajes de validación escritos en español conservan su detalle.
+
+Notificaciones se retira solo del menú lateral: campana, contador, refresco, lectura y enlace a la bandeja siguen disponibles. Se corrige la cascada `.btn`/`.bell-trigger` que reducía el SVG por padding, se evita que los iconos se encojan y se usa el par de colores informativo para mayor contraste. Los iconos decorativos no reciben foco y las acciones conservan nombres accesibles.
+
+`npm test` y `npm run build`. Revisión cloud en Chromium con respuestas ficticias: PDFs, SMS simulado, comprobantes, campana (lectura/refresco), menú e iconos visibles en temas claro/oscuro. Actualizar este contenedor junto a los portales de ventas/pacientes para habilitar descargas binarias. No se modificaron HU-14 ni HU-24.

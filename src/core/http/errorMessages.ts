@@ -87,6 +87,8 @@ export function translateServerMessage(message: string): string {
 }
 
 export function translateFieldMessage(message: string): string {
+  // Domain validation is also authored in Spanish. Keep its actionable field-level guidance.
+  if (/^(Debe |Este campo |El |La |Los |Las |Solo |Adjunta |Escribe |Usa |Máximo |No |Código |Se |Ya |Simulador |Revisa |Selecciona |Elige |Espera )/.test(message)) return message;
   const between = /^must (?:have |be )between (\d+) and (\d+)( characters)?$/.exec(message);
   if (between) return between[3] ? `Debe tener entre ${between[1]} y ${between[2]} caracteres.` : `Debe estar entre ${between[1]} y ${between[2]}.`;
   const maximum = /^must have at most (\d+) characters$/.exec(message);

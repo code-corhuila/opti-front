@@ -159,7 +159,7 @@ function IconBadge({ icon, tone, size }: { icon: ReactNode; tone: IconTone; size
   return (
     <span className={`icon-badge icon-badge-${tone} icon-badge-${size}`} aria-hidden="true">
       <svg width={size === 'lg' ? 24 : 18} height={size === 'lg' ? 24 : 18} viewBox="0 0 20 20" fill="none"
-        stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+        stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" focusable="false">
         {icon}
       </svg>
     </span>
